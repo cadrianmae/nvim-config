@@ -1,0 +1,22 @@
+{
+  "name": "user_snippets",
+  "engines": {
+    "vscode": "^1.11.0"
+  },
+  "contributes": {
+    "snippets": [
+      {
+        "language": ["global", "all"],
+        "path": "./all.json"
+      },
+      {
+        "language": "python",
+        "path": "./python.json"
+      },
+      {
+        "language": "makefile",
+        "path": "./makefile.json"
+      }
+    ]
+  }
+}
