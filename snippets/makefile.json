@@ -1,0 +1,13 @@
+{
+  "Create program description": {
+    "prefix": "desc",
+    "description": "Makefile header comment",
+    "body": [
+      "# ${1:Title} - $TM_FILENAME",
+      "# ${2:Description}",
+      "#",
+      "# Author: Mae Capacite",
+      "# Date: $CURRENT_YEAR-$CURRENT_MONTH-$CURRENT_DATE"
+    ]
+  }
+}

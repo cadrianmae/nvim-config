@@ -1,0 +1,14 @@
+{
+  "Create program description": {
+    "prefix": "desc",
+    "description": "Basic program description",
+    "body": [
+      "$BLOCK_COMMENT_START",
+      "\t${1:[ title ]} - $TM_FILENAME",
+      "\t${2:[ Description ]}",
+      "\tAuthor: Mae Capacite",
+      "\tDate: $CURRENT_YEAR-$CURRENT_MONTH-$CURRENT_DATE",
+      "$BLOCK_COMMENT_END"
+    ]
+  }
+}
