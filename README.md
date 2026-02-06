@@ -1,11 +1,10 @@
-# Mae's Neovim Configuration
+# 🚀 Mae's Neovim Configuration
 
-My personal AstroNvim configuration. Heavily personalised for multi language development for academic work.
+My personal AstroNvim configuration. Heavily personalised for multi-language development and academic work.
 
 ## 🛠️ Installation
 
-
-#### Make a backup of your current nvim and shared folder
+#### Make a backup of your current nvim folders
 
 ```shell
 mv ~/.config/nvim ~/.config/nvim.bak
@@ -23,7 +22,7 @@ You can also just clone this repository directly if you do not want to track you
 #### Clone the repository
 
 ```shell
-git clone https://github.com/cadrianmae/nvim-config> ~/.config/nvim
+git clone https://github.com/cadrianmae/nvim-config ~/.config/nvim
 ```
 
 #### Start Neovim

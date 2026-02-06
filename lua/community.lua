@@ -136,7 +136,7 @@ return {
   -- ========================================================================
   -- https://astronvim.github.io/astrocommunity/#media
   { import = "astrocommunity.media.cord-nvim" },
-  { import = "astrocommunity.media.image-nvim" },
+  -- { import = "astrocommunity.media.image-nvim" }, -- Using snacks.image instead
 
   -- ========================================================================
   -- Motion
