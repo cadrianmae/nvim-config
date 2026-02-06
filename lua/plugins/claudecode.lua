@@ -30,12 +30,11 @@ return {
   -- Configure auto-save to exclude claudecode diff buffers
   -- Prevents auto-save from immediately accepting Claude's proposed changes
   {
-    "auto-save-nvim",
+    "okuuva/auto-save.nvim",
     optional = true,
     opts = {
       condition = function(buf)
-        local fn = vim.fn
-        local bufname = fn.bufname(buf)
+        local bufname = vim.fn.bufname(buf)
 
         -- Exclude claudecode diff buffers by name pattern
         if bufname:match("%(proposed%)") or bufname:match("%(NEW FILE %- proposed%)") then
@@ -48,8 +47,7 @@ return {
         end
 
         -- Exclude acwrite buffer type (used by claudecode diffs)
-        local buftype = vim.bo[buf].buftype
-        if buftype == "acwrite" then
+        if vim.fn.getbufvar(buf, "&buftype") == "acwrite" then
           return false
         end
 
