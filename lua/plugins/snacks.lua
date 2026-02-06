@@ -7,5 +7,9 @@ return {
     -- Other useful features
     bigfile = { enabled = true },
     quickfile = { enabled = true },
+    -- Image rendering (better tmux support than image.nvim)
+    image = { enabled = true },
+    words = { enabled = true },
+    statuscolumn = { enabled = true },
   },
 }
