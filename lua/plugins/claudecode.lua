@@ -4,7 +4,11 @@ return {
     dependencies = { "folke/snacks.nvim" },
     opts = {
       terminal = {
-        provider = "none", -- Disable terminal, use MCP IDE mode only
+        provider = "external",
+        provider_opts = {
+          -- Spawn in tmux pane to the right (25% width)
+          external_terminal_cmd = "tmux split-window -h -p 25 -c %s %s",
+        },
       },
     },
     keys = {
