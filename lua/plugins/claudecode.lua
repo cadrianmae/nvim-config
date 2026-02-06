@@ -2,7 +2,11 @@ return {
   {
     "coder/claudecode.nvim",
     dependencies = { "folke/snacks.nvim" },
-    config = true,
+    opts = {
+      terminal = {
+        provider = "none", -- Disable terminal, use MCP IDE mode only
+      },
+    },
     keys = {
       { "<leader>a", nil, desc = require("astroui").get_icon("AI", 1, true) .. "AI/Claude Code" },
       { "<leader>ac", "<cmd>ClaudeCode<cr>", desc = "Toggle Claude" },
@@ -21,6 +25,37 @@ return {
       -- Diff management
       { "<leader>aa", "<cmd>ClaudeCodeDiffAccept<cr>", desc = "Accept diff" },
       { "<leader>ad", "<cmd>ClaudeCodeDiffDeny<cr>", desc = "Deny diff" },
+    },
+  },
+  -- Configure auto-save to exclude claudecode diff buffers
+  -- Prevents auto-save from immediately accepting Claude's proposed changes
+  {
+    "auto-save-nvim",
+    optional = true,
+    opts = {
+      condition = function(buf)
+        local fn = vim.fn
+        local bufname = fn.bufname(buf)
+
+        -- Exclude claudecode diff buffers by name pattern
+        if bufname:match("%(proposed%)") or bufname:match("%(NEW FILE %- proposed%)") then
+          return false
+        end
+
+        -- Exclude buffers with claudecode variables
+        if vim.b[buf].claudecode_diff then
+          return false
+        end
+
+        -- Exclude acwrite buffer type (used by claudecode diffs)
+        local buftype = vim.bo[buf].buftype
+        if buftype == "acwrite" then
+          return false
+        end
+
+        -- Allow auto-save for all other buffers
+        return true
+      end,
     },
   },
 }
