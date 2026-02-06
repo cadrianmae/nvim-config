@@ -12,11 +12,6 @@ return {
     "andweeb/presence.nvim",
     enabled = false,
   },
-  {
-    "ray-x/lsp_signature.nvim",
-    event = "BufRead",
-    config = function() require("lsp_signature").setup() end,
-  },
 
   -- == Examples of Overriding Plugins ==
 
@@ -26,17 +21,37 @@ return {
     opts = function(_, opts)
       -- customize the dashboard header
       opts.section.header.val = {
-        " █████  ███████ ████████ ██████   ██████",
-        "██   ██ ██         ██    ██   ██ ██    ██",
-        "███████ ███████    ██    ██████  ██    ██",
-        "██   ██      ██    ██    ██   ██ ██    ██",
-        "██   ██ ███████    ██    ██   ██  ██████",
-        " ",
-        "    ███    ██ ██    ██ ██ ███    ███",
-        "    ████   ██ ██    ██ ██ ████  ████",
-        "    ██ ██  ██ ██    ██ ██ ██ ████ ██",
-        "    ██  ██ ██  ██  ██  ██ ██  ██  ██",
-        "    ██   ████   ████   ██ ██      ██",
+        -- " █████  ███████ ████████ ██████   ██████",
+        -- "██   ██ ██         ██    ██   ██ ██    ██",
+        -- "███████ ███████    ██    ██████  ██    ██",
+        -- "██   ██      ██    ██    ██   ██ ██    ██",
+        -- "██   ██ ███████    ██    ██   ██  ██████",
+        -- " ",
+        -- "    ███    ██ ██    ██ ██ ███    ███",
+        -- "    ████   ██ ██    ██ ██ ████  ████",
+        -- "    ██ ██  ██ ██    ██ ██ ██ ████ ██",
+        -- "    ██  ██ ██  ██  ██  ██ ██  ██  ██",
+        -- "    ██   ████   ████   ██ ██      ██",
+"⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣴⣿⣿⡷⣄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀",
+"⠀         AstroNvim⠀⠀⠀⠀⠀⢀⣴⣿⡿⠋⠈⠻⣮⣳⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀",
+"⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣠⣴⣾⡿⠋⠀⠀⠀⠀⠙⣿⣿⣤⣀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀",
+"⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣤⣶⣿⡿⠟⠛⠉⠀⠀⠀⠀⠀⠀⠀⠈⠛⠛⠿⠿⣿⣷⣶⣤⣄⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀",
+"⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣠⣴⣾⡿⠟⠋⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠉⠛⠻⠿⣿⣶⣦⣄⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀",
+"⠀⠀⠀⣀⣠⣤⣤⣀⡀⠀⠀⣀⣴⣿⡿⠛⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠉⠛⠿⣿⣷⣦⣄⡀⠀⠀⠀⠀⠀⠀⠀⢀⣀⣤⣄⠀⠀",
+"⢀⣤⣾⡿⠟⠛⠛⢿⣿⣶⣾⣿⠟⠉⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠉⠛⠿⣿⣷⣦⣀⣀⣤⣶⣿⡿⠿⢿⣿⡀⠀",
+"⣿⣿⠏⠀⢰⡆⠀⠀⠉⢿⣿⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠙⠻⢿⡿⠟⠋⠁⠀⠀⢸⣿⠇⠀",
+"⣿⡟⠀⣀⠈⣀⡀⠒⠃⠀⠙⣿⡆⠀⠀⠀⠀⠀⠀⠀⣀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⣿⠇⠀",
+"⣿⡇⠀⠛⢠⡋⢙⡆⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣾⣿⣿⠄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⣿⠀⠀",
+"⣿⣧⠀⠀⠀⠓⠛⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠘⠛⠋⠀⠀⢸⣧⣤⣤⣶⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢰⣿⡿⠀⠀",
+"⣿⣿⣤⣀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠉⠉⠉⠻⣷⣶⣶⡆⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣿⣿⠁⠀⠀",
+"⠈⠛⠻⠿⢿⣿⣷⣶⣦⣤⣄⣀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣴⣿⣷⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣾⣿⡏⠀⠀⠀",
+"⠀⠀⠀⠀⠀⠀⠀⠉⠙⠛⠻⠿⢿⣿⣷⣶⣦⣤⣄⣀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠙⠿⠛⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠘⢿⣿⡄⠀⠀",
+"⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠉⠙⠛⠻⠿⢿⣿⣷⣶⣦⣤⣄⣀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⢿⣿⡄⠀",
+"⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠉⠉⠛⠛⠿⠿⣿⣷⣶⣶⣤⣤⣀⡀⠀⠀⠀⢀⣴⡆⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⢿⡿⣄",
+"⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠉⠉⠛⠛⠿⠿⣿⣷⣶⡿⠋⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⣿⣹",
+"⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⣿⠃⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣀⣀⠀⠀⠀⠀⠀⠀⢸⣧",
+"⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢻⣿⣆⠀⠀⠀⠀⠀⠀⢀⣀⣠⣤⣶⣾⣿⣿⣿⣿⣤⣄⣀⡀⠀⠀⠀⣿",
+"⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠻⢿⣻⣷⣶⣾⣿⣿⡿⢯⣛⣛⡋⠁⠀⠀⠉⠙⠛⠛⠿⣿⣿⡷⣶⣿",
       }
       return opts
     end,
@@ -44,6 +59,76 @@ return {
 
   -- You can disable default plugins as follows:
   { "max397574/better-escape.nvim", enabled = false },
+
+  -- Override Copilot to enable it for Markdown files
+  {
+    "zbirenbaum/copilot.lua",
+    opts = {
+      filetypes = {
+        markdown = true,
+        yaml = false,
+        ["."] = false,
+      },
+      panel = {
+        enabled = true,
+        auto_refresh = false,
+        keymap = {
+          jump_prev = false,
+          jump_next = false,
+          accept = false,
+          refresh = false,
+          open = false, -- Disable default <M-CR>
+        },
+      },
+      suggestion = {
+        enabled = true,
+        auto_trigger = true,
+        keymap = {
+          accept = "<M-}>", -- Alt+} (accept full suggestion)
+          accept_word = "<M-CR>", -- Alt+Enter (accept one word)
+          accept_line = "<M-l>", -- Alt+l (accept one line)
+          next = "<M-]>",
+          prev = "<M-[>",
+          dismiss = "<C-]>",
+        },
+      },
+    },
+    keys = {
+      -- { "<Leader>cp", function() require("copilot.panel").open() end, desc = "Copilot panel" },
+    },
+  },
+
+  -- Override nvim-cmp to remove Tab for Copilot acceptance
+  {
+    "hrsh7th/nvim-cmp",
+    opts = function(_, opts)
+      local cmp = require "cmp"
+      local luasnip = require "luasnip"
+
+      -- Remove Copilot from Tab mapping (only use for completion/snippets)
+      opts.mapping["<Tab>"] = cmp.mapping(function(fallback)
+        if cmp.visible() then
+          cmp.select_next_item()
+        elseif luasnip.expand_or_jumpable() then
+          luasnip.expand_or_jump()
+        else
+          fallback()
+        end
+      end, { "i", "s" })
+
+      opts.mapping["<S-Tab>"] = cmp.mapping(function(fallback)
+        if cmp.visible() then
+          cmp.select_prev_item()
+        elseif luasnip.jumpable(-1) then
+          luasnip.jump(-1)
+        else
+          fallback()
+        end
+      end, { "i", "s" })
+
+      return opts
+    end,
+  },
 
   -- You can also easily customize additional setup of plugins that is outside of the plugin's setup call
   {
