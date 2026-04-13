@@ -33,6 +33,7 @@ return {
         signcolumn = "yes", -- sets vim.opt.signcolumn to yes
         wrap = true, -- sets vim.opt.wrap
         scrolloff = 2, -- keep 2 lines visible above/below cursor
+        conceallevel = 2, -- required for obsidian.nvim UI (checkboxes, link concealment)
       },
       g = { -- vim.g.<key>
         -- configure global vim variables (vim.g)
@@ -44,6 +45,9 @@ return {
     -- NOTE: keycodes follow the casing in the vimdocs. For example, `<Leader>` must be capitalized
     mappings = {
       -- first key is the mode
+      t = {
+        ["jk"] = { "<C-\\><C-n>", desc = "Exit terminal mode" },
+      },
       n = {
         -- second key is the lefthand side of the map
 
