@@ -48,6 +48,12 @@ return {
       t = {
         ["jk"] = { "<C-\\><C-n>", desc = "Exit terminal mode" },
       },
+      x = {
+        ["<Leader>/"] = {
+          "<Esc><Cmd>lua require('Comment.api').locked('toggle.blockwise')(vim.fn.visualmode())<CR>",
+          desc = "Toggle block comment",
+        },
+      },
       n = {
         -- second key is the lefthand side of the map
 
