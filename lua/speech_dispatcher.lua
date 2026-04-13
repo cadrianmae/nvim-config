@@ -4,7 +4,7 @@
 local M = {}
 
 local config = {
-  rate = 0,  -- spd-say -r, range -100 to +100
+  rate = 0, -- spd-say -r, range -100 to +100
   pitch = 0, -- spd-say -p, range -100 to +100
 }
 
@@ -16,14 +16,10 @@ local function speak(text)
 end
 
 -- Cancel all queued speech
-local function cancel()
-  vim.fn.jobstart({ "spd-say", "--cancel" }, { detach = true })
-end
+local function cancel() vim.fn.jobstart({ "spd-say", "--cancel" }, { detach = true }) end
 
 -- Get the text of the current line
-local function get_line()
-  return vim.api.nvim_get_current_line()
-end
+local function get_line() return vim.api.nvim_get_current_line() end
 
 -- Get visual selection text (called after exiting visual mode so marks are set)
 local function get_visual_selection()
@@ -43,28 +39,20 @@ end
 function M.setup(opts)
   config = vim.tbl_deep_extend("force", config, opts or {})
 
-  vim.api.nvim_create_user_command("SpeakLine", function()
-    speak(get_line())
-  end, { desc = "Speak current line" })
+  vim.api.nvim_create_user_command("SpeakLine", function() speak(get_line()) end, { desc = "Speak current line" })
 
-  vim.api.nvim_create_user_command("SpeakStop", function()
-    cancel()
-  end, { desc = "Stop/cancel speech" })
+  vim.api.nvim_create_user_command("SpeakStop", function() cancel() end, { desc = "Stop/cancel speech" })
 
   -- Normal mode: speak current line
-  vim.keymap.set("n", "<leader>sl", function()
-    speak(get_line())
-  end, { desc = "Speak line" })
+  vim.keymap.set("n", "<leader>sl", function() speak(get_line()) end, { desc = "Speak line" })
 
   -- Normal mode: stop speech
-  vim.keymap.set("n", "<leader>sq", function()
-    cancel()
-  end, { desc = "Stop speech" })
+  vim.keymap.set("n", "<leader>sq", function() cancel() end, { desc = "Stop speech" })
 
   -- Visual mode: speak selection
   -- Press Escape first to exit visual and set '< '> marks
   vim.keymap.set("x", "<leader>ss", function()
-    vim.cmd("normal! \27")
+    vim.cmd "normal! \27"
     speak(get_visual_selection())
   end, { desc = "Speak selection" })
 end

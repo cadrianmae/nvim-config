@@ -4,7 +4,7 @@
 
 -- Force Unix line endings (LF) for all files
 vim.opt.fileformat = "unix"
-vim.opt.fileformats = "unix,dos"  -- Prefer Unix, but can read DOS
+vim.opt.fileformats = "unix,dos" -- Prefer Unix, but can read DOS
 
 -- Set up custom filetypes
 vim.filetype.add {
@@ -20,7 +20,7 @@ vim.filetype.add {
 }
 
 -- Speech dispatcher TTS
-require("speech_dispatcher").setup({
-  rate = 0,  -- adjust -100 to +100
+require("speech_dispatcher").setup {
+  rate = 0, -- adjust -100 to +100
   pitch = 0,
-})
+}
