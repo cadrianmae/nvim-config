@@ -18,3 +18,9 @@ vim.filetype.add {
     ["~/%.config/foo/.*"] = "fooscript",
   },
 }
+
+-- Speech dispatcher TTS
+require("speech_dispatcher").setup({
+  rate = 0,  -- adjust -100 to +100
+  pitch = 0,
+})
