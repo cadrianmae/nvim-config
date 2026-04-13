@@ -12,11 +12,11 @@ local config = {
 local function speak(text)
   if not text or vim.trim(text) == "" then return end
   local cmd = { "spd-say", "-r", tostring(config.rate), "-p", tostring(config.pitch), text }
-  vim.fn.jobstart(cmd, { detach = true })
+  vim.defer_fn(function() vim.fn.jobstart(cmd) end, 0)
 end
 
 -- Cancel all queued speech
-local function cancel() vim.fn.jobstart({ "spd-say", "--cancel" }, { detach = true }) end
+local function cancel() vim.fn.jobstart { "spd-say", "--cancel" } end
 
 -- Get the text of the current line
 local function get_line() return vim.api.nvim_get_current_line() end
