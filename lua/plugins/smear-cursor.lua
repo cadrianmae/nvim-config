@@ -3,6 +3,17 @@
 return {
   "sphamba/smear-cursor.nvim",
   event = "VeryLazy",
+  keys = {
+    {
+      "<Leader>uf",
+      function()
+        local sc = require "smear_cursor"
+        sc.particles_enabled = not sc.particles_enabled
+        vim.notify("Cursor flame " .. (sc.particles_enabled and "enabled" or "disabled"))
+      end,
+      desc = "Toggle cursor flame particles",
+    },
+  },
   opts = {
     -- Smear behaviour
     smear_between_buffers = true,
@@ -20,7 +31,7 @@ return {
     hide_target_hack = true,
 
     -- Fire particles (perf-tuned)
-    particles_enabled = true,
+    particles_enabled = false, -- previous: true
     particle_max_num = 50,
     particle_spread = 1,
     particles_per_second = 150,

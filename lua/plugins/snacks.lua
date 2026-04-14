@@ -1,6 +1,30 @@
 -- snacks.nvim - QoL plugin collection
 return {
   "folke/snacks.nvim",
+  keys = {
+    {
+      "<Leader>uI",
+      function()
+        local cfg = require("snacks.image").config.doc
+        cfg.enabled = not cfg.enabled
+        if cfg.enabled then
+          for _, buf in ipairs(vim.api.nvim_list_bufs()) do
+            if vim.api.nvim_buf_is_loaded(buf) then
+              vim.b[buf].snacks_image_attached = nil
+              require("snacks.image.doc").attach(buf)
+            end
+          end
+        else
+          require("snacks.image.placement").clean()
+          for _, buf in ipairs(vim.api.nvim_list_bufs()) do
+            vim.b[buf].snacks_image_attached = nil
+          end
+        end
+        vim.notify("Snacks image " .. (cfg.enabled and "enabled" or "disabled"))
+      end,
+      desc = "Toggle inline image rendering",
+    },
+  },
   opts = {
     -- Terminal with double-escape to normal mode (ESC ESC)
     terminal = {},
