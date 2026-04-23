@@ -35,6 +35,9 @@ return {
   {
     import = "astrocommunity.colorscheme.catppuccin",
   },
+  {
+    import = "astrocommunity.colorscheme.tokyonight-nvim",
+  },
 
   -- ========================================================================
   -- Comment

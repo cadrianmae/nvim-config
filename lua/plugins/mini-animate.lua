@@ -1,8 +1,7 @@
--- Disable mini.animate cursor animation (using smear-cursor.nvim instead)
--- Keep scroll animation active
+-- Re-enabled mini.animate cursor (smear-cursor disabled for perf)
 return {
   "echasnovski/mini.animate",
   opts = {
-    cursor = { enable = false },
+    cursor = { enable = true },
   },
 }

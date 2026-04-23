@@ -71,12 +71,60 @@ return {
           desc = "Close buffer from tabline",
         },
 
-        -- tables with just a `desc` key will be registered with which-key if it's installed
-        -- this is useful for naming menus
-        -- ["<Leader>b"] = { desc = "Buffers" },
+        -- Remap Terminal group from <Leader>t to <Leader>T, freeing <Leader>t for Tabs
+        ["<Leader>T"] = { desc = require("astroui").get_icon("Terminal", 1, true) .. "Terminal" },
+        ["<Leader>Tf"] = { "<Cmd>ToggleTerm direction=float<CR>", desc = "ToggleTerm float" },
+        ["<Leader>Th"] = { "<Cmd>ToggleTerm size=10 direction=horizontal<CR>", desc = "ToggleTerm horizontal split" },
+        ["<Leader>Tv"] = { "<Cmd>ToggleTerm size=80 direction=vertical<CR>", desc = "ToggleTerm vertical split" },
+        ["<Leader>Tl"] = {
+          function()
+            local astro = require "astrocore"
+            local worktree = astro.file_worktree()
+            local flags = worktree and (" --work-tree=%s --git-dir=%s"):format(worktree.toplevel, worktree.gitdir) or ""
+            astro.toggle_term_cmd { cmd = "lazygit " .. flags, direction = "float" }
+          end,
+          desc = "ToggleTerm lazygit",
+        },
+        ["<Leader>Tn"] = {
+          function() require("astrocore").toggle_term_cmd "node" end,
+          desc = "ToggleTerm node",
+        },
+        ["<Leader>Tp"] = {
+          function() require("astrocore").toggle_term_cmd "python" end,
+          desc = "ToggleTerm python",
+        },
+        ["<Leader>Tu"] = {
+          function() require("astrocore").toggle_term_cmd { cmd = "gdu", direction = "float" } end,
+          desc = "ToggleTerm gdu",
+        },
+        ["<Leader>Tt"] = {
+          function() require("astrocore").toggle_term_cmd { cmd = "btm", direction = "float" } end,
+          desc = "ToggleTerm btm",
+        },
+        -- Unbind remaining <Leader>t* terminal mappings with no tab replacement
+        ["<Leader>tv"] = false,
+        ["<Leader>tu"] = false,
+        ["<Leader>tt"] = false,
 
-        -- setting a mapping to false will disable it
-        -- ["<C-S>"] = false,
+        -- Tabs (window layouts) — <Leader>t prefix
+        ["<Leader>t"] = { desc = require("astroui").get_icon("Tab", 1, true) .. "Tabs" },
+        ["<Leader>tn"] = { "<Cmd>tabnew<CR>", desc = "New tab" },
+        ["<Leader>tc"] = { "<Cmd>tabclose<CR>", desc = "Close tab" },
+        ["<Leader>to"] = { "<Cmd>tabonly<CR>", desc = "Close other tabs" },
+        ["<Leader>tl"] = { "<Cmd>tabnext<CR>", desc = "Next tab" },
+        ["<Leader>th"] = { "<Cmd>tabprevious<CR>", desc = "Previous tab" },
+        ["<Leader>tp"] = { "<Cmd>tabprevious<CR>", desc = "Previous tab" },
+        ["<Leader>tf"] = { "<Cmd>tabfirst<CR>", desc = "First tab" },
+        ["<Leader>tL"] = { "<Cmd>tablast<CR>", desc = "Last tab" },
+        ["<Leader>t1"] = { "1gt", desc = "Go to tab 1" },
+        ["<Leader>t2"] = { "2gt", desc = "Go to tab 2" },
+        ["<Leader>t3"] = { "3gt", desc = "Go to tab 3" },
+        ["<Leader>t4"] = { "4gt", desc = "Go to tab 4" },
+        ["<Leader>t5"] = { "5gt", desc = "Go to tab 5" },
+        ["<Leader>t6"] = { "6gt", desc = "Go to tab 6" },
+        ["<Leader>t7"] = { "7gt", desc = "Go to tab 7" },
+        ["<Leader>t8"] = { "8gt", desc = "Go to tab 8" },
+        ["<Leader>t9"] = { "9gt", desc = "Go to tab 9" },
       },
     },
   },

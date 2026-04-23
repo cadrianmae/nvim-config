@@ -56,7 +56,23 @@ return {
           background = true,
         },
       },
-      color_overrides = {},
+      color_overrides = {
+        latte = {
+          -- text tiers
+          text = "#3d4055",     -- 9.00:1 AAA (was 7.06:1)
+          subtext1 = "#4d5064", -- 7.02:1 AAA (was 5.53:1)
+          subtext0 = "#63667a", -- 5.00:1 AA  (was 4.37:1, failed AA)
+          overlay2 = "#6a6d81", -- 4.51:1 AA  (was 3.49:1, failed AA)
+          -- accents darkened to pass AA as text (red already passed)
+          peach = "#bf4701",    -- 4.51:1 AA (was 2.64:1)
+          yellow = "#996214",   -- 4.52:1 AA (was 2.31:1)
+          green = "#327d22",    -- 4.54:1 AA (was 2.96:1)
+          teal = "#137a80",     -- 4.50:1 AA (was 3.31:1)
+          sky = "#0376a3",      -- 4.50:1 AA (was 2.47:1)
+          blue = "#1962f5",     -- 4.52:1 AA (was 4.34:1)
+          pink = "#c81f9b",     -- 4.50:1 AA (was 2.34:1)
+        },
+      },
       custom_highlights = {},
       default_integrations = true,
       auto_integrations = true,
