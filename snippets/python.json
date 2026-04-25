@@ -7,7 +7,7 @@
       "${1:Title} - $TM_FILENAME",
       "${2:Description}",
       "",
-      "Author: cadrianmae",
+      "Author: Mae",
       "Date: $CURRENT_YEAR-$CURRENT_MONTH-$CURRENT_DATE",
       "\"\"\""
     ]
