@@ -6,7 +6,7 @@
       "$BLOCK_COMMENT_START",
       "\t${1:[ title ]} - $TM_FILENAME",
       "\t${2:[ Description ]}",
-      "\tAuthor: Mae",
+      "\tAuthor: cadrianmae",
       "\tDate: $CURRENT_YEAR-$CURRENT_MONTH-$CURRENT_DATE",
       "$BLOCK_COMMENT_END"
     ]

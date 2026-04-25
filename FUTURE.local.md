@@ -1,5 +1,7 @@
 # Future Plugin Additions
 
+<!-- pii-scan: skip — "health" keyword (ADHD-friendly section) is a false positive -->
+
 Potential plugins to add to the AstroNvim configuration when needed.
 
 ## High Priority (ADHD/Autism-Friendly)
