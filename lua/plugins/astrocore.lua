@@ -5,6 +5,24 @@
 -- NOTE: We highly recommend setting up the Lua Language Server (`:LspInstall lua_ls`)
 --       as this provides autocomplete and documentation while editing
 
+-- Telescope git pickers ignore opts.cwd (#516, #3440), and #2595 means subdirs
+-- without their own .git fail. Workaround: temporarily lcd to the buffer's git
+-- root, then restore. Lets git_bcommits/git_commits/git_status work from anywhere.
+local function git_picker(name)
+  return function()
+    local file = vim.api.nvim_buf_get_name(0)
+    local root = vim.fs.root(file ~= "" and file or 0, ".git")
+    if not root then
+      return vim.notify("Not in a git repo", vim.log.levels.WARN)
+    end
+    local saved = vim.fn.getcwd(0)
+    vim.cmd.lcd(root)
+    local ok, err = pcall(require("telescope.builtin")[name])
+    vim.cmd.lcd(saved)
+    if not ok then vim.notify(tostring(err), vim.log.levels.ERROR) end
+  end
+end
+
 ---@type LazySpec
 return {
   "AstroNvim/astrocore",
@@ -125,6 +143,11 @@ return {
         ["<Leader>t7"] = { "7gt", desc = "Go to tab 7" },
         ["<Leader>t8"] = { "8gt", desc = "Go to tab 8" },
         ["<Leader>t9"] = { "9gt", desc = "Go to tab 9" },
+
+        -- Override AstroNvim's git pickers to lcd to git root first (telescope #516, #3440)
+        ["<Leader>gc"] = { git_picker("git_commits"), desc = "Git commits (repository)" },
+        ["<Leader>gC"] = { git_picker("git_bcommits"), desc = "Git commits (current file)" },
+        ["<Leader>gt"] = { git_picker("git_status"), desc = "Git status" },
       },
     },
   },

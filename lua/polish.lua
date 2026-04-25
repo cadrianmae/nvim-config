@@ -6,6 +6,9 @@
 vim.opt.fileformat = "unix"
 vim.opt.fileformats = "unix,dos" -- Prefer Unix, but can read DOS
 
+-- Give CursorHold breathing room (default 4000; was 300 — too aggressive for long markdown)
+vim.o.updatetime = 800
+
 -- Set up custom filetypes
 vim.filetype.add {
   extension = {

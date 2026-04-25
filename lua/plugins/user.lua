@@ -83,6 +83,8 @@ return {
       suggestion = {
         enabled = true,
         auto_trigger = true,
+        debounce = 200,
+        hide_during_completion = true,
         keymap = {
           accept = "<M-}>", -- Alt+} (accept full suggestion)
           accept_word = "<M-CR>", -- Alt+Enter (accept one word)

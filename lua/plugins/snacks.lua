@@ -35,6 +35,9 @@ return {
     image = {
       enabled = true,
       doc = {
+        -- float mode: cheaper than inline on long docs; images shown via hover
+        inline = false,
+        float = true,
         -- auto_resize re-renders images when window splits/resizes (default is static)
         auto_resize = true,
         -- max_width/max_height as fallback when wins() returns empty (e.g. async load);
