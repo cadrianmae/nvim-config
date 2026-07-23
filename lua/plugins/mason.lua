@@ -1,5 +1,3 @@
-if true then return {} end -- WARN: REMOVE THIS LINE TO ACTIVATE THIS FILE
-
 -- Customize Mason plugins
 
 ---@type LazySpec
@@ -11,6 +9,8 @@ return {
     opts = {
       ensure_installed = {
         "lua_ls",
+        "clangd", -- C LSP: completion + diagnostics for syscalls, pthreads
+        "dockerls", -- Containerfile/Dockerfile LSP
         -- add more arguments for adding more language servers
       },
     },
@@ -22,6 +22,7 @@ return {
     opts = {
       ensure_installed = {
         "stylua",
+        "hadolint", -- Dockerfile/Containerfile linter (auto-registered by mason-null-ls)
         -- add more arguments for adding more null-ls sources
       },
     },
@@ -32,6 +33,7 @@ return {
     opts = {
       ensure_installed = {
         "python",
+        "codelldb", -- C/C++ debugger: step through thread + mutex bugs
         -- add more arguments for adding more debuggers
       },
     },

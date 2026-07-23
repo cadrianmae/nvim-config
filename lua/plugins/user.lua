@@ -10,7 +10,7 @@ return {
 
   {
     "andweeb/presence.nvim",
-    enabled = false,
+    enabled = true,
   },
 
   -- == Examples of Overriding Plugins ==

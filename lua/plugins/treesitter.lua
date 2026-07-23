@@ -10,6 +10,9 @@ return {
         "vim",
         "mermaid",
         "gdscript",
+        "c", -- C source files
+        "dockerfile", -- Containerfile syntax
+        "bash", -- setup_env.sh / public_test.sh
       },
     },
   },

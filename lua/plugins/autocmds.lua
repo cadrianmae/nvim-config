@@ -3,6 +3,12 @@ return {
     "AstroNvim/astrocore",
     --@type AstroCoreOpts
     opts = {
+      -- Map non-standard filenames to filetypes (drives LSP + linter attach)
+      filetypes = {
+        filename = {
+          Containerfile = "dockerfile", -- so dockerls + hadolint attach
+        },
+      },
       autocmds = {
         man_line_numbers = {
           {
