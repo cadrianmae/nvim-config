@@ -17,10 +17,21 @@ local M = {}
 -- Installed regardless of which language bundles are present.
 ---@type table<LangToolingCategory, string[]>
 M.baseline = {
-  treesitter = { "lua", "vim", "vimdoc", "markdown", "markdown_inline", "bash" },
-  lsp = { "lua_ls", "marksman" },
-  tools = { "stylua", "prettierd", "markdownlint-cli2" },
-  dap = {},
+  treesitter = {
+    "lua",
+    "vim",
+    "vimdoc",
+    "markdown",
+    "markdown_inline",
+    "bash",
+    "c",
+    "dockerfile",
+    "gdscript",
+    "mermaid",
+  },
+  lsp = { "lua_ls", "clangd", "dockerls", "marksman" },
+  tools = { "stylua", "hadolint", "prettierd", "markdownlint-cli2" },
+  dap = { "python", "codelldb" },
 }
 
 ---@type table<LangToolingCategory, table<string, true>>

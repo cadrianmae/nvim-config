@@ -1,3 +1,5 @@
+local policy = require "lang_policy"
+
 require("lazy").setup({
   {
     "AstroNvim/AstroNvim",
@@ -13,6 +15,26 @@ require("lazy").setup({
   },
   { import = "community" },
   { import = "plugins" },
+  { import = "plugins.lang" },
+
+  -- Install policy, applied last so it overwrites the entries appended by the
+  -- AstroCommunity packs. See lua/lang_policy.lua.
+  {
+    "nvim-treesitter/nvim-treesitter",
+    opts = function(_, opts) opts.ensure_installed = policy.resolve "treesitter" end,
+  },
+  {
+    "williamboman/mason-lspconfig.nvim",
+    opts = function(_, opts) opts.ensure_installed = policy.resolve "lsp" end,
+  },
+  {
+    "jay-babu/mason-null-ls.nvim",
+    opts = function(_, opts) opts.ensure_installed = policy.resolve "tools" end,
+  },
+  {
+    "jay-babu/mason-nvim-dap.nvim",
+    opts = function(_, opts) opts.ensure_installed = policy.resolve "dap" end,
+  },
 } --[[@as LazySpec]], {
   -- Configure any other `lazy.nvim` configuration options here
   install = { colorscheme = { "astrotheme", "habamax" } },
