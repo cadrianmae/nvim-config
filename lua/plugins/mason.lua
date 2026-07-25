@@ -10,7 +10,6 @@ return {
       ensure_installed = {
         "lua_ls",
         "clangd", -- C LSP: completion + diagnostics for syscalls, pthreads
-        "dockerls", -- Containerfile/Dockerfile LSP
         -- add more arguments for adding more language servers
       },
     },
@@ -22,7 +21,6 @@ return {
     opts = {
       ensure_installed = {
         "stylua",
-        "hadolint", -- Dockerfile/Containerfile linter (auto-registered by mason-null-ls)
         -- add more arguments for adding more null-ls sources
       },
     },

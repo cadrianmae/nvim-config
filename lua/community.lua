@@ -170,9 +170,6 @@ return {
   { import = "astrocommunity.pack.lua" },
   { import = "astrocommunity.pack.markdown" },
   { import = "astrocommunity.pack.python" }, -- pyright + ruff + black
-  { import = "astrocommunity.pack.godot" },
-  { import = "astrocommunity.pack.go" },
-  { import = "astrocommunity.pack.typescript" },
   { import = "astrocommunity.pack.cpp" },
 
   -- ========================================================================
