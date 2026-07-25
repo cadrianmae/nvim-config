@@ -3,16 +3,11 @@
 
 ---@type LazySpec
 return {
-  -- Filetype detection + exrc for project-local .nvim.lua
+  -- Filetype detection
   {
     "AstroNvim/astrocore",
     ---@type AstroCoreOpts
     opts = {
-      options = {
-        opt = {
-          exrc = true,
-        },
-      },
       filetypes = {
         extension = {
           bolt = "python", -- bolt = Python-superset DSL

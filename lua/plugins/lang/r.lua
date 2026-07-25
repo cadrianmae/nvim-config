@@ -5,7 +5,10 @@
 -- lintr calls normalizePath() on the buffer's file URI, which fails because
 -- the file doesn't exist on disk. write_to_disk=true writes the temp file
 -- before LSPs attach (see otter/init.lua: "write out once before lsps can complain").
+-- R and Quarto: otter.nvim handles embedded code blocks in .qmd files.
+-- On-demand: nothing installs until an .R or .qmd file is opened.
 return {
+  { import = "astrocommunity.pack.quarto" },
   {
     "jmbuhr/otter.nvim",
     opts = {

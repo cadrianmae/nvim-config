@@ -1,4 +1,6 @@
 -- Prolog language support configuration
+-- Prolog: SWI-Prolog LSP, hand-wired because AstroCommunity has no Prolog pack.
+-- On-demand: nothing installs until a .pl, .pro or .P file is opened.
 
 ---@type LazySpec
 return {

@@ -52,6 +52,7 @@ return {
         wrap = true, -- sets vim.opt.wrap
         scrolloff = 2, -- keep 2 lines visible above/below cursor
         conceallevel = 2, -- required for obsidian.nvim UI (checkboxes, link concealment)
+        exrc = true, -- read project-local .nvim.lua (cwd only, no upward search)
       },
       g = { -- vim.g.<key>
         -- configure global vim variables (vim.g)

@@ -173,9 +173,7 @@ return {
   { import = "astrocommunity.pack.godot" },
   { import = "astrocommunity.pack.go" },
   { import = "astrocommunity.pack.typescript" },
-  { import = "astrocommunity.pack.sql" },
   { import = "astrocommunity.pack.cpp" },
-  { import = "astrocommunity.pack.quarto" }, -- Quarto + R treesitter
 
   -- ========================================================================
   -- Programming Language Support
