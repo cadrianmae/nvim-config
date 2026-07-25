@@ -12,9 +12,7 @@ local function git_picker(name)
   return function()
     local file = vim.api.nvim_buf_get_name(0)
     local root = vim.fs.root(file ~= "" and file or 0, ".git")
-    if not root then
-      return vim.notify("Not in a git repo", vim.log.levels.WARN)
-    end
+    if not root then return vim.notify("Not in a git repo", vim.log.levels.WARN) end
     local saved = vim.fn.getcwd(0)
     vim.cmd.lcd(root)
     local ok, err = pcall(require("telescope.builtin")[name])
@@ -146,20 +144,29 @@ return {
         ["<Leader>t9"] = { "9gt", desc = "Go to tab 9" },
 
         -- Override AstroNvim's git pickers to lcd to git root first (telescope #516, #3440)
-        ["<Leader>gc"] = { git_picker("git_commits"), desc = "Git commits (repository)" },
-        ["<Leader>gC"] = { git_picker("git_bcommits"), desc = "Git commits (current file)" },
-        ["<Leader>gt"] = { git_picker("git_status"), desc = "Git status" },
+        ["<Leader>gc"] = { git_picker "git_commits", desc = "Git commits (repository)" },
+        ["<Leader>gC"] = { git_picker "git_bcommits", desc = "Git commits (current file)" },
+        ["<Leader>gt"] = { git_picker "git_status", desc = "Git status" },
       },
     },
-    -- Install missing Mason servers on first use of a filetype. See
-    -- lua/lang_policy.lua for the selection logic and why
-    -- mason-lspconfig's own `automatic_installation` cannot do this itself.
+    -- Install missing Mason tooling on first use of a filetype. See
+    -- lua/lang_policy.lua for the selection logic and why the Mason
+    -- integrations' own `automatic_installation` cannot do this themselves.
     autocmds = {
       lang_policy_install = {
         {
           event = "FileType",
-          desc = "Install Mason servers configured for this filetype but not yet installed",
-          callback = function(args) require("lang_policy").install_for_filetype(vim.bo[args.buf].filetype) end,
+          desc = "Install Mason tooling declared for this filetype but not yet installed",
+          -- Deferred so the plugins that load on this same event have settled:
+          -- the installer only consults Mason integrations already loaded, and
+          -- never forces one to load.
+          callback = function(args)
+            vim.schedule(function()
+              if vim.api.nvim_buf_is_valid(args.buf) then
+                require("lang_policy").install_for_filetype(vim.bo[args.buf].filetype, args.buf)
+              end
+            end)
+          end,
         },
       },
     },

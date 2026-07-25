@@ -26,25 +26,42 @@ require("lazy").setup({
       opts.auto_install = true -- parsers compile on first open of that filetype
     end,
   },
+  -- Every overwrite below records what it is about to discard, so the
+  -- FileType installer in lang_policy.lua can still install it on first use.
+  -- Overwriting without a matching `declare` is pure deletion, and silent.
   {
     "williamboman/mason-lspconfig.nvim",
     opts = function(_, opts)
       -- Packs (e.g. astrocommunity/pack/go) declare servers by appending to
-      -- this list. Record what they asked for before overwriting it, so the
-      -- on-demand installer still knows which servers a filetype's bundle
-      -- actually wants. See lua/lang_policy.lua's `declare`/`get_declared`.
+      -- this list. See lua/lang_policy.lua's `declare`/`get_declared`.
       policy.declare("lsp", opts.ensure_installed)
       opts.ensure_installed = policy.resolve "lsp"
-      opts.automatic_installation = true -- servers install on first attach
+    end,
+  },
+  {
+    "AstroNvim/astrolsp",
+    ---@param opts AstroLSPOpts
+    opts = function(_, opts)
+      -- The other channel a bundle can name a server through: docker.lua and
+      -- minecraft.lua both use it. Read it too, so choosing either channel
+      -- works rather than one of them silently never installing. Servers with
+      -- no Mason package (prolog_lsp, qmlls) map to nil and are skipped.
+      policy.declare("lsp", opts.servers)
     end,
   },
   {
     "jay-babu/mason-null-ls.nvim",
-    opts = function(_, opts) opts.ensure_installed = policy.resolve "tools" end,
+    opts = function(_, opts)
+      policy.declare("tools", opts.ensure_installed)
+      opts.ensure_installed = policy.resolve "tools"
+    end,
   },
   {
     "jay-babu/mason-nvim-dap.nvim",
-    opts = function(_, opts) opts.ensure_installed = policy.resolve "dap" end,
+    opts = function(_, opts)
+      policy.declare("dap", opts.ensure_installed)
+      opts.ensure_installed = policy.resolve "dap"
+    end,
   },
 } --[[@as LazySpec]], {
   -- Configure any other `lazy.nvim` configuration options here

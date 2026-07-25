@@ -99,6 +99,74 @@ check(
   { "gopls" }
 )
 
+-- on_demand: Mason packages a bundle attributes to filetypes by hand, for
+-- tooling the integration plugins' own mapping tables cannot route.
+policy._reset()
+check("get_on_demand is empty for an unattributed filetype", policy.get_on_demand "go", {})
+
+policy.on_demand("go", { "gotests", "impl" })
+check("on_demand records packages against a filetype", policy.get_on_demand "go", { "gotests", "impl" })
+
+policy.on_demand("go", { "iferr", "gotests" })
+check("repeat on_demand calls are additive and deduplicated", policy.get_on_demand "go", { "gotests", "iferr", "impl" })
+
+policy.on_demand({ "typescript", "javascript" }, { "js-debug-adapter" })
+check("on_demand accepts a list of filetypes", policy.get_on_demand "typescript", { "js-debug-adapter" })
+check("on_demand applies to every filetype in the list", policy.get_on_demand "javascript", { "js-debug-adapter" })
+check("on_demand does not leak to an unrelated filetype", policy.get_on_demand "lua", {})
+
+-- resolve_installs unions every category plus the hand-attributed packages.
+-- Stub adapters stand in for mason-lspconfig/mason-null-ls/mason-nvim-dap.
+local function stub(serving_by_filetype, packages)
+  return {
+    module = "stub",
+    serving = function(filetype) return serving_by_filetype[filetype] or {} end,
+    to_package = function(name) return packages[name] end,
+  }
+end
+
+policy._reset()
+policy.declare("lsp", { "gopls" })
+policy.declare("tools", { "goimports" })
+policy.declare("dap", { "delve" })
+policy.on_demand("go", { "gotests" })
+
+local go_adapters = {
+  lsp = stub({ go = { "gopls" } }, { gopls = "gopls" }),
+  tools = stub({ go = { "goimports", "gofumpt" } }, { goimports = "goimports", gofumpt = "gofumpt" }),
+  dap = stub({ go = { "delve" } }, { delve = "delve" }),
+}
+
+check(
+  "resolve_installs unions lsp, tools, dap and hand-attributed packages",
+  policy.resolve_installs("go", {}, go_adapters),
+  { "delve", "goimports", "gopls", "gotests" }
+)
+
+check(
+  "resolve_installs skips packages already installed, including attributed ones",
+  policy.resolve_installs("go", { gopls = true, delve = true, gotests = true }, go_adapters),
+  { "goimports" }
+)
+
+check(
+  "resolve_installs excludes a tool that serves the filetype but nothing declared",
+  policy.resolve_installs("go", { goimports = true, gopls = true, delve = true, gotests = true }, go_adapters),
+  {}
+)
+
+check("resolve_installs returns nothing for an unrelated filetype", policy.resolve_installs("lua", {}, go_adapters), {})
+
+-- The tools/dap regression this fix addresses: before the matching `declare`
+-- calls existed, the overwrite in lazy_setup.lua deleted these lists outright
+-- and nothing could reinstate them.
+policy._reset()
+check(
+  "an undeclared tools category installs nothing, even when a tool serves the filetype",
+  policy.resolve_installs("go", {}, go_adapters),
+  {}
+)
+
 if failures > 0 then
   print(("\n%d test(s) failed"):format(failures))
   vim.cmd "cquit 1"
