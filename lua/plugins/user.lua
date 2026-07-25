@@ -63,6 +63,13 @@ return {
   -- Override Copilot to enable it for Markdown files
   {
     "zbirenbaum/copilot.lua",
+    -- Never start Copilot without a UI. Its node server is only reaped once the
+    -- LSP initialise handshake completes; a headless Neovim that exits sooner
+    -- orphans it to init holding several hundred MB, and repeated headless runs
+    -- stack those orphans until memory runs out. Headless Neovim cannot use
+    -- suggestions anyway. Caveat: a `--headless --listen` server that a UI
+    -- attaches to later will not have Copilot, since this is evaluated at startup.
+    cond = function() return #vim.api.nvim_list_uis() > 0 end,
     opts = {
       filetypes = {
         markdown = true,
