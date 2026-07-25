@@ -606,13 +606,13 @@ exrc option moves from the minecraft file to astrocore, where it belongs."
 ## Task 5: Move the mid-tier languages
 
 **Files:**
-- Create: `lua/plugins/lang/go.lua`, `lua/plugins/lang/godot.lua`, `lua/plugins/lang/web.lua`
+- Create: `lua/plugins/lang/go.lua`, `lua/plugins/lang/godot.lua`, `lua/plugins/lang/web.lua`, `lua/plugins/lang/docker.lua`
 - Delete: `lua/plugins/godotdev.lua`
-- Modify: `lua/community.lua`
+- Modify: `lua/community.lua`, `lua/plugins/mason.lua`, `lua/plugins/treesitter.lua`
 
 **Interfaces:**
 - Consumes: nothing new.
-- Produces: three bundle files. No new symbols.
+- Produces: four bundle files. No new symbols.
 
 - [ ] **Step 1: Create the Go bundle**
 
@@ -679,7 +679,51 @@ Delete from `lua/community.lua`:
   { import = "astrocommunity.pack.typescript" },
 ```
 
-- [ ] **Step 4: Verify all three**
+- [ ] **Step 4: Create the Docker bundle**
+
+Docker tooling is currently declared directly in `lua/plugins/mason.lua` and
+`lua/plugins/treesitter.lua`. Once the policy overwrite is in place those
+entries are discarded, so Docker needs a bundle like any other stack.
+
+Create `lua/plugins/lang/docker.lua`:
+
+```lua
+-- Docker: dockerls and hadolint for Dockerfile and Containerfile.
+-- On-demand: nothing installs until a Dockerfile is opened.
+---@type LazySpec
+return {
+  {
+    "nvim-treesitter/nvim-treesitter",
+    opts = function(_, opts)
+      if type(opts.ensure_installed) == "table" then vim.list_extend(opts.ensure_installed, { "dockerfile" }) end
+    end,
+  },
+  {
+    "AstroNvim/astrolsp",
+    ---@type AstroLSPOpts
+    opts = {
+      servers = { "dockerls" },
+    },
+  },
+}
+```
+
+Remove `"dockerls"` from the `mason-lspconfig.nvim` `ensure_installed` list in
+`lua/plugins/mason.lua`, `"hadolint"` from the `mason-null-ls.nvim` list, and
+`"dockerfile"` from `lua/plugins/treesitter.lua`. hadolint installs on demand
+through none-ls when a Dockerfile is opened.
+
+Verify:
+
+```bash
+cd ~/.config/nvim
+printf 'FROM alpine\n' > /tmp/Dockerfile
+nvim --headless "+e /tmp/Dockerfile" "+lua print('ft:', vim.bo.filetype)" +qa 2>&1 | tail -2
+```
+
+Expected: `ft: dockerfile`.
+
+- [ ] **Step 5: Verify all three language bundles**
 
 ```bash
 cd ~/.config/nvim
@@ -694,13 +738,13 @@ done
 
 Expected: no errors and `go`, `gdscript`, `typescript` respectively.
 
-- [ ] **Step 5: Lint and commit**
+- [ ] **Step 6: Lint and commit**
 
 ```bash
 cd ~/.config/nvim
 stylua lua/ --check && selene lua/
 git add -A
-git commit -m "refactor(nvim): move go, godot and web into lang bundles
+git commit -m "refactor(nvim): move go, godot, web and docker into lang bundles
 
 Also removes plugins/godotdev.lua, which has been dead code behind an
 'if true then return {} end' guard since it was added."
