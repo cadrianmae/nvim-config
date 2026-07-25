@@ -1,13 +1,12 @@
 -- Docker: dockerls and hadolint for Dockerfile and Containerfile.
 -- On-demand: nothing installs until a Dockerfile is opened.
+--
+-- hadolint is a none-ls source, but no pack declares it here, so it is
+-- attributed to the filetype directly.
+require("lang_policy").on_demand("dockerfile", { "hadolint" })
+
 ---@type LazySpec
 return {
-  {
-    "nvim-treesitter/nvim-treesitter",
-    opts = function(_, opts)
-      if type(opts.ensure_installed) == "table" then vim.list_extend(opts.ensure_installed, { "dockerfile" }) end
-    end,
-  },
   {
     "AstroNvim/astrolsp",
     ---@type AstroLSPOpts

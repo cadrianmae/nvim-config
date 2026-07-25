@@ -1,6 +1,13 @@
 -- Python: the pack provides pyright, ruff and black; this overrides pyright
 -- with basedpyright. See https://docs.astronvim.com/recipes/advanced_lsp/
 -- On-demand: nothing installs until a .py file is opened.
+--
+-- The pack routes debugpy, black and isort through mason-tool-installer,
+-- which this config does not install, so those specs are dropped as
+-- `optional` and nothing would ever install them -- conform names `black` for
+-- python and would fail silently. Attribute them to the filetype instead.
+require("lang_policy").on_demand("python", { "black", "debugpy", "isort" })
+
 ---@type LazySpec
 return {
   { import = "astrocommunity.pack.python" },

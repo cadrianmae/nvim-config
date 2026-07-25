@@ -3,14 +3,13 @@
 -- build.gradle.kts belongs to both.
 -- On-demand: jdtls is one of the largest Mason packages, so it stays
 -- uninstalled until a .java or .kt file is opened.
+--
+-- The java pack's `javadbg`/`javatest` adapters are absent from
+-- mason-nvim-dap's filetype table, so they are attributed by hand.
+require("lang_policy").on_demand("java", { "java-debug-adapter", "java-test" })
+
 ---@type LazySpec
 return {
   { import = "astrocommunity.pack.java" },
   { import = "astrocommunity.pack.kotlin" },
-  {
-    "nvim-treesitter/nvim-treesitter",
-    opts = function(_, opts)
-      if type(opts.ensure_installed) == "table" then vim.list_extend(opts.ensure_installed, { "groovy" }) end
-    end,
-  },
 }

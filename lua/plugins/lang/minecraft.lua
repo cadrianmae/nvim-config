@@ -1,5 +1,10 @@
--- Minecraft datapack support (beet / mecha / bolt + Spyglass LSP)
--- Used by: ~/git/github.com/cadrianmae/Advancement-Count
+-- Minecraft: datapack support (beet / mecha / bolt) plus the Spyglass LSP.
+-- Used by ~/git/github.com/cadrianmae/Advancement-Count.
+--
+-- mason-lspconfig has no entry mapping `spyglassmc_language_server` to its
+-- Mason package, so naming the server alone would never install it. Attribute
+-- the package to the filetype by hand.
+require("lang_policy").on_demand("mcfunction", { "spyglassmc-language-server" })
 
 ---@type LazySpec
 return {
@@ -17,8 +22,7 @@ return {
     },
   },
 
-  -- Register Spyglass LSP (install via :MasonInstall spyglassmc-language-server)
-  -- Handles: .mcfunction, .json (advancements/tags/loot/etc), .mcmeta, .nbt, .snbt
+  -- Handles .mcfunction, .json (advancements/tags/loot/etc), .mcmeta, .nbt, .snbt
   {
     "AstroNvim/astrolsp",
     ---@type AstroLSPOpts
