@@ -1147,6 +1147,27 @@ Inspect what is listed, then remove them — they are leftovers from interrupted
 rm -rf ~/.local/share/nvim/lazy/*.cloning
 ```
 
+- [ ] **Step 2b: Clear abandoned Mason staging and stale locks**
+
+Headless verification runs quit immediately with `+qa`, which aborts any install
+they triggered part-way through. That leaves partial downloads in Mason's
+staging directory and lock files with no live installer behind them.
+
+```bash
+du -sh ~/.local/share/nvim/mason/staging
+ls ~/.local/share/nvim/mason/staging
+```
+
+With no Neovim running, remove the partial directories and stale locks:
+
+```bash
+pgrep -a nvim   # confirm nothing is running first
+rm -rf ~/.local/share/nvim/mason/staging/*
+```
+
+Anything genuinely needed reinstalls on demand the next time its filetype is
+opened, so this is safe. Report how much was reclaimed.
+
 - [ ] **Step 3: Uninstall orphaned Mason packages**
 
 List what is installed but no longer required:
