@@ -8,8 +8,6 @@ return {
     -- overrides `require("mason-lspconfig").setup(...)`
     opts = {
       ensure_installed = {
-        "lua_ls",
-        "clangd", -- C LSP: completion + diagnostics for syscalls, pthreads
         -- add more arguments for adding more language servers
       },
     },
@@ -20,7 +18,6 @@ return {
     -- overrides `require("mason-null-ls").setup(...)`
     opts = {
       ensure_installed = {
-        "stylua",
         -- add more arguments for adding more null-ls sources
       },
     },
@@ -30,8 +27,6 @@ return {
     -- overrides `require("mason-nvim-dap").setup(...)`
     opts = {
       ensure_installed = {
-        "python",
-        "codelldb", -- C/C++ debugger: step through thread + mutex bugs
         -- add more arguments for adding more debuggers
       },
     },

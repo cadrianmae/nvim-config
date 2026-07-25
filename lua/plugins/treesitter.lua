@@ -6,10 +6,7 @@ return {
     "nvim-treesitter/nvim-treesitter",
     opts = {
       ensure_installed = {
-        "lua",
-        "vim",
         "mermaid",
-        "c", -- C source files
         "bash", -- setup_env.sh / public_test.sh
       },
     },

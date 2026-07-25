@@ -1,8 +1,9 @@
--- Override astrocommunity.pack.python to use basedpyright instead of pyright
--- Based on: https://docs.astronvim.com/recipes/advanced_lsp/
--- and: https://github.com/neovim/nvim-lspconfig/blob/master/lua/lspconfig/configs/basedpyright.lua
+-- Python: the pack provides pyright, ruff and black; this overrides pyright
+-- with basedpyright. See https://docs.astronvim.com/recipes/advanced_lsp/
+-- On-demand: nothing installs until a .py file is opened.
 ---@type LazySpec
 return {
+  { import = "astrocommunity.pack.python" },
   {
     "AstroNvim/astrolsp",
     ---@type AstroLSPOpts
@@ -35,9 +36,7 @@ return {
     opts = function(_, opts)
       opts.ensure_installed = opts.ensure_installed or {}
       -- Remove pyright if present
-      opts.ensure_installed = vim.tbl_filter(function(server)
-        return server ~= "pyright"
-      end, opts.ensure_installed)
+      opts.ensure_installed = vim.tbl_filter(function(server) return server ~= "pyright" end, opts.ensure_installed)
       -- Add basedpyright
       table.insert(opts.ensure_installed, "basedpyright")
     end,

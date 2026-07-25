@@ -74,10 +74,7 @@ return {
   { import = "astrocommunity.editing-support.auto-save-nvim" },
   { import = "astrocommunity.editing-support.text-case-nvim" }, -- ga + motion (e.g., gaciw for camelCase)
   { import = "astrocommunity.editing-support.conform-nvim" },
-  {
-    import = "astrocommunity.editing-support.zen-mode-nvim",
-    ft = { "markdown", "tex" },
-  },
+  { import = "astrocommunity.editing-support.zen-mode-nvim" },
 
   -- ========================================================================
   -- File Explorer
@@ -124,15 +121,6 @@ return {
   -- Markdown and LaTeX
   -- ========================================================================
   -- https://astronvim.github.io/astrocommunity/#markdown-and-latex
-  {
-    import = "astrocommunity.markdown-and-latex.render-markdown-nvim",
-    ft = "markdown",
-  },
-  {
-    import = "astrocommunity.markdown-and-latex.glow-nvim", -- terminal markdown preview (no Node.js needed)
-    ft = "markdown",
-  },
-  { import = "astrocommunity.markdown-and-latex.markdown-preview-nvim" },
 
   -- ========================================================================
   -- Media
@@ -158,19 +146,12 @@ return {
   -- Note Taking
   -- ========================================================================
   -- https://astronvim.github.io/astrocommunity/#note-taking
-  {
-    import = "astrocommunity.note-taking.obsidian-nvim",
-    ft = "markdown",
-  },
+  { import = "astrocommunity.note-taking.obsidian-nvim" },
 
   -- ========================================================================
   -- Pack
   -- ========================================================================
   -- https://astronvim.github.io/astrocommunity/#pack
-  { import = "astrocommunity.pack.lua" },
-  { import = "astrocommunity.pack.markdown" },
-  { import = "astrocommunity.pack.python" }, -- pyright + ruff + black
-  { import = "astrocommunity.pack.cpp" },
 
   -- ========================================================================
   -- Programming Language Support
