@@ -21,11 +21,17 @@ require("lazy").setup({
   -- AstroCommunity packs. See lua/lang_policy.lua.
   {
     "nvim-treesitter/nvim-treesitter",
-    opts = function(_, opts) opts.ensure_installed = policy.resolve "treesitter" end,
+    opts = function(_, opts)
+      opts.ensure_installed = policy.resolve "treesitter"
+      opts.auto_install = true -- parsers compile on first open of that filetype
+    end,
   },
   {
     "williamboman/mason-lspconfig.nvim",
-    opts = function(_, opts) opts.ensure_installed = policy.resolve "lsp" end,
+    opts = function(_, opts)
+      opts.ensure_installed = policy.resolve "lsp"
+      opts.automatic_installation = true -- servers install on first attach
+    end,
   },
   {
     "jay-babu/mason-null-ls.nvim",
