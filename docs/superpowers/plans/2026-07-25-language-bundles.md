@@ -446,6 +446,97 @@ Expected: gopls installs and appears in the client list. If it does not attach w
 
 **If `automatic_installation` does not install:** the fallback is to keep a larger eager list. Add the servers you actually need to `M.baseline.lsp` and note in a comment that mason-lspconfig v1.32.0 did not honour the setting in this configuration.
 
+- [ ] **Step 4b: Add the FileType-driven installer**
+
+Amendment, added after Step 4 established that mason-lspconfig v1.32.0's
+`automatic_installation` does not fire in this configuration. Its
+`lspconfig_hook` only triggers for servers something already configures, and the
+on-demand design is precisely what removed those declarations. The plan's
+original fallback (a larger eager list) was rejected — it would abandon the
+disk saving, which lives almost entirely in the servers.
+
+The replacement is ours: when a filetype is first opened, install the Mason
+package for any server that is *configured for that filetype but not installed*.
+Bundles decide *which* server; this decides *when* it arrives.
+
+Split it into a pure function and a thin autocmd, so the selection logic is
+testable without running Mason.
+
+Add to `lua/lang_policy.lua`:
+
+```lua
+--- Mason packages to install for a filetype: those serving it that are
+--- configured but not yet installed. Pure, so it can be tested directly.
+---@param configured string[] lspconfig server names this config sets up
+---@param serving string[] lspconfig server names that handle the filetype
+---@param installed table<string, true> mason package names already present
+---@param to_package fun(server: string): string? lspconfig name to mason package name
+---@return string[] mason package names, sorted
+function M.packages_to_install(configured, serving, installed, to_package)
+  local wanted, out = {}, {}
+  for _, server in ipairs(serving) do
+    wanted[server] = true
+  end
+  for _, server in ipairs(configured) do
+    if wanted[server] then
+      local package = to_package(server)
+      if package and not installed[package] then out[#out + 1] = package end
+    end
+  end
+  table.sort(out)
+  return out
+end
+```
+
+Then wire it. The autocmd stays thin — it gathers the four inputs and calls the
+pure function. Guard against repeat work with a per-filetype seen table, and
+fail silently when Mason or mason-lspconfig is unavailable, so a broken install
+never blocks opening a file.
+
+Required behaviour:
+- Runs on `FileType`, once per filetype per session.
+- Installs asynchronously; opening a file must not block.
+- Never installs a server the config does not configure.
+- No error, notification storm, or stack trace when offline.
+
+Test cases to add to `tests/lang_policy_spec.lua`, using a stub `to_package`:
+
+```lua
+local function to_package(server)
+  return ({ gopls = "gopls", basedpyright = "basedpyright" })[server]
+end
+
+check(
+  "installs a configured server that serves the filetype and is missing",
+  policy.packages_to_install({ "gopls" }, { "gopls" }, {}, to_package),
+  { "gopls" }
+)
+check(
+  "skips a server that is already installed",
+  policy.packages_to_install({ "gopls" }, { "gopls" }, { gopls = true }, to_package),
+  {}
+)
+check(
+  "skips a server that serves the filetype but is not configured",
+  policy.packages_to_install({}, { "gopls" }, {}, to_package),
+  {}
+)
+check(
+  "skips a configured server that does not serve this filetype",
+  policy.packages_to_install({ "basedpyright" }, { "gopls" }, {}, to_package),
+  {}
+)
+check(
+  "skips a server with no mason package",
+  policy.packages_to_install({ "qmlls" }, { "qmlls" }, {}, to_package),
+  {}
+)
+```
+
+Verify end to end, exactly as Step 4 did — uninstall gopls, open a Go file, and
+confirm it reinstalls without manual intervention. Remember to clear orphaned
+copilot processes after each headless run: `pkill -f 'nvim/lazy/copilo[t]'`.
+
 - [ ] **Step 5: Check startup**
 
 ```bash
