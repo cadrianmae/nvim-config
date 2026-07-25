@@ -4,12 +4,6 @@
 ---@type LazySpec
 return {
   {
-    "nvim-treesitter/nvim-treesitter",
-    opts = function(_, opts)
-      if type(opts.ensure_installed) == "table" then vim.list_extend(opts.ensure_installed, { "qmljs" }) end
-    end,
-  },
-  {
     "AstroNvim/astrolsp",
     ---@type AstroLSPOpts
     opts = {
@@ -17,7 +11,9 @@ return {
         qmlls = {
           cmd = { "qmlls" },
           filetypes = { "qml" },
-          root_markers = { ".git" },
+          -- `root_dir`, not `root_markers`: the latter belongs to the newer
+          -- vim.lsp.config schema and this lspconfig version drops it silently.
+          root_dir = require("lspconfig.util").root_pattern ".git",
         },
       },
       servers = vim.fn.executable "qmlls" == 1 and { "qmlls" } or {},

@@ -1,12 +1,12 @@
--- R language support (LSP + otter.nvim fix)
--- Quarto pack provides R treesitter, this adds LSP.
---
--- otter.nvim creates virtual .qmd.otter.R buffers (in-memory by default).
--- lintr calls normalizePath() on the buffer's file URI, which fails because
--- the file doesn't exist on disk. write_to_disk=true writes the temp file
--- before LSPs attach (see otter/init.lua: "write out once before lsps can complain").
--- R and Quarto: otter.nvim handles embedded code blocks in .qmd files.
+-- R and Quarto: the Quarto pack provides the parsers, this adds the LSP.
 -- On-demand: nothing installs until an .R or .qmd file is opened.
+--
+-- otter.nvim creates virtual .qmd.otter.R buffers, in memory by default.
+-- lintr calls normalizePath() on the buffer's file URI, which fails because
+-- the file does not exist on disk. write_to_disk writes the temp file before
+-- the LSPs attach (see otter/init.lua: "write out once before lsps can
+-- complain").
+---@type LazySpec
 return {
   { import = "astrocommunity.pack.quarto" },
   {

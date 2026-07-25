@@ -1,20 +1,7 @@
--- Prolog language support configuration
--- Prolog: SWI-Prolog LSP, hand-wired because AstroCommunity has no Prolog pack.
--- On-demand: nothing installs until a .pl, .pro or .P file is opened.
-
+-- Prolog: SWI-Prolog LSP, hand-wired because AstroCommunity has no Prolog pack
+-- and swipl is not a Mason package -- it comes from the system.
 ---@type LazySpec
 return {
-  -- Treesitter support
-  {
-    "nvim-treesitter/nvim-treesitter",
-    opts = function(_, opts)
-      if type(opts.ensure_installed) == "table" then
-        vim.list_extend(opts.ensure_installed, { "prolog" })
-      end
-    end,
-  },
-
-  -- LSP support (manual setup - not available in Mason)
   {
     "AstroNvim/astrolsp",
     ---@type AstroLSPOpts
@@ -36,9 +23,7 @@ return {
           root_dir = require("lspconfig.util").root_pattern("pack.pl", ".git"),
         },
       },
-      servers = {
-        "prolog_lsp",
-      },
+      servers = { "prolog_lsp" },
     },
   },
 
@@ -49,9 +34,9 @@ return {
     opts = {
       filetypes = {
         extension = {
-          pl = "prolog",  -- .pl files
+          pl = "prolog", -- .pl files
           pro = "prolog", -- .pro files
-          P = "prolog",   -- .P files (XSB Prolog)
+          P = "prolog", -- .P files (XSB Prolog)
         },
       },
     },
