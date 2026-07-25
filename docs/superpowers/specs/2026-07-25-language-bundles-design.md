@@ -302,14 +302,24 @@ Per-language check: open a file of that type, confirm the expected client via
 4. **First open of a dormant language pauses** while tooling downloads. Accepted
    trade for 1.3 GB to ~300 MB.
 
-## Open experiment
+## Resolved: `ft` on an import block
 
-Does `ft` on an import block prevent that pack's `opts` from merging into
-`mason-lspconfig`? If it does, `{ import = "astrocommunity.pack.go", ft = "go" }`
-would be a cleaner mechanism than the overwrite specs — and it is an idiom
-already used in `community.lua` for obsidian and zen-mode. The suspicion is that
-import specs are parsed at startup regardless of `ft`, so the `opts` merge
-anyway. Test: add `ft` to one pack, check whether `:Mason` queues its install.
+Settled from source rather than by experiment. In
+`lazy.nvim/lua/lazy/core/plugin.lua:118-210`, `Spec:import` reads only `import`,
+`name`, `cond` and `enabled`. Imported modules are handed to `Spec:normalize`
+with no inheritance of parent fields, and `self.importing` is used only to
+attribute error messages. Every other key on an import block — `ft`, `event`,
+`keys` — is discarded.
 
-The design does not depend on the outcome. The overwrite mechanism works either
-way; a positive result would simplify it.
+Consequences:
+
+1. `{ import = "astrocommunity.pack.go", ft = "go" }` would not defer anything.
+   The overwrite mechanism in section 2 is required, not merely preferred.
+2. `cond` and `enabled` *do* work on import blocks (lines 136-141 return early,
+   so the module is never read). This is not used here — the plugin layer is
+   deliberately not gated — but it is the correct mechanism should that change.
+3. Three existing `ft` keys in `community.lua` are no-ops: on the
+   `render-markdown-nvim`, `obsidian-nvim` and `zen-mode-nvim` imports. Whether
+   those plugins lazy-load still depends on the packs' own specs; the keys
+   themselves do nothing. They are removed during migration to avoid implying a
+   guarantee that is not there.
