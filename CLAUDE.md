@@ -98,6 +98,25 @@ require("lang_policy").eager { lsp = { "clangd" }, treesitter = { "c" } }
 Editor-wide tooling that is not tied to one language goes in `M.baseline` in
 `lua/lang_policy.lua`.
 
+**Declaration channels.** `lazy_setup.lua` overwrites the `ensure_installed`
+list of nvim-treesitter, mason-lspconfig, mason-null-ls and mason-nvim-dap, so
+anything a bundle appends there is discarded unless the policy layer read it
+back first. The channels it reads are mason-lspconfig's `ensure_installed`,
+AstroLSP's `servers`, and mason-null-ls's and mason-nvim-dap's
+`ensure_installed`. Tooling that none of those can map to a filetype — a server
+missing from mason-lspconfig's package mapping, or a Mason package that is not
+a none-ls source — is attributed by hand:
+
+```lua
+require("lang_policy").on_demand("mcfunction", { "spyglassmc-language-server" })
+```
+
+Parsers cannot be added to nvim-treesitter's `ensure_installed` at all;
+`auto_install` compiles them on first open instead. An *injected* language
+(mermaid inside a markdown fence) is the exception, because no buffer ever has
+that filetype — those go in `M.baseline.treesitter`. See the header of
+`lua/plugins/lang/init.lua`.
+
 Project-specific overrides use `.neoconf.json`, which `neoconf.nvim` finds by
 searching upward from the file — so it applies from any subdirectory of the
 project:

@@ -1,4 +1,33 @@
 -- Language bundles live in this directory, one file per language stack.
 -- Adding a language means adding a file here; removing one means deleting it.
 -- See docs/superpowers/specs/2026-07-25-language-bundles-design.md
+--
+-- How to declare tooling from a bundle
+-- ------------------------------------
+-- `lazy_setup.lua` overwrites the `ensure_installed` list of nvim-treesitter,
+-- mason-lspconfig, mason-null-ls and mason-nvim-dap with the eager list that
+-- `lang_policy.lua` resolves. Anything a bundle appends to one of those lists
+-- is therefore thrown away, and the on-demand installer only reinstates what
+-- the policy layer read back first. Use one of these, and nothing else:
+--
+--   * eager tooling (must work offline)
+--       require("lang_policy").eager { lsp = { "clangd" }, dap = { "codelldb" } }
+--
+--   * on-demand LSP servers -- append to mason-lspconfig's `ensure_installed`
+--     (what the AstroCommunity packs do) or list them in AstroLSP's `servers`.
+--     Both channels are read, so either is fine.
+--
+--   * on-demand formatters, linters and debug adapters -- append to
+--     mason-null-ls's or mason-nvim-dap's `ensure_installed`, as the packs do.
+--     Routed to a filetype by those plugins' own mapping tables.
+--
+--   * anything those mapping tables do not know about
+--       require("lang_policy").on_demand("mcfunction", { "spyglassmc-language-server" })
+--     Mason package names, exactly as `:Mason` lists them.
+--
+-- Adding parsers by hand to nvim-treesitter's `ensure_installed` does NOT
+-- work: the list is discarded, and treesitter's `auto_install` compiles a
+-- parser on first open of its own filetype instead. The exception is an
+-- injected language (mermaid inside a markdown fence), which no buffer's
+-- filetype ever matches -- those belong in `lang_policy.baseline.treesitter`.
 return {}
