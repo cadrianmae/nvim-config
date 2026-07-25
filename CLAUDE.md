@@ -13,9 +13,11 @@ This is an **AstroNvim v4** configuration repository. AstroNvim is a Neovim dist
 ├── init.lua                 # Bootstraps lazy.nvim and loads main config
 ├── lua/
 │   ├── lazy_setup.lua       # Lazy.nvim plugin manager setup
-│   ├── community.lua        # AstroCommunity plugin imports (28+ plugins)
+│   ├── lang_policy.lua      # Baseline/eager/on-demand tooling install policy
+│   ├── community.lua        # AstroCommunity plugin imports (non-language)
 │   ├── polish.lua           # Final setup (filetypes, line endings)
 │   └── plugins/             # Custom plugin configurations
+│       └── lang/            # One file per language stack (see Language Bundles)
 └── snippets/                # Custom LuaSnip snippets
 ```
 
@@ -71,24 +73,110 @@ return {
 
 **Using `config` function:** Must explicitly call `setup(opts)` - `opts` alone won't initialize the plugin.
 
+### Language Bundles
+
+Each language stack owns one file in `lua/plugins/lang/`. Adding a language
+means adding a file; removing one means deleting it. Nothing about a language
+lives anywhere else.
+
+```lua
+-- lua/plugins/lang/rust.lua
+---@type LazySpec
+return {
+  { import = "astrocommunity.pack.rust" },
+}
+```
+
+Tooling installs on first use — opening a `.rs` file installs rust-analyzer and
+compiles the parser. A bundle that must work offline registers itself eagerly
+instead:
+
+```lua
+require("lang_policy").eager { lsp = { "clangd" }, treesitter = { "c" } }
+```
+
+Editor-wide tooling that is not tied to one language goes in `M.baseline` in
+`lua/lang_policy.lua`.
+
+Project-specific overrides use `.neoconf.json`, which `neoconf.nvim` finds by
+searching upward from the file — so it applies from any subdirectory of the
+project:
+
+```json
+{
+  "lspconfig": {
+    "sqls": false,
+    "basedpyright": {
+      "python.analysis.typeCheckingMode": "off"
+    }
+  }
+}
+```
+
+Worked example — `~/git/github.com/cadrianmae/tu856-4/.neoconf.json`, applying
+to every module directory beneath it:
+
+```json
+{
+  "lspconfig": {
+    "sqlfluff": {
+      "dialect": "postgres"
+    },
+    "basedpyright": {
+      "python.analysis.typeCheckingMode": "basic",
+      "python.analysis.diagnosticSeverityOverrides": {
+        "reportMissingImports": "warning"
+      }
+    }
+  }
+}
+```
+
+Use `.neoconf.json` for settings and for disabling a server in one project. Do
+not move language *bundles* into a project's `.lazy.lua`: on-demand
+installation already makes an unused global bundle free, while a project-scoped
+spec is removed by `:Lazy sync` (which cleans) whenever Neovim is opened
+elsewhere, and churns `lazy-lock.json` in this repository. Reserve `.lazy.lua`
+for a plugin that genuinely only ever applies to one project.
+
+Note: `ft`, `event` and `keys` do nothing on an `{ import = ... }` block. Lazy's
+`Spec:import` reads only `import`, `name`, `cond` and `enabled`.
+
+A project that needs its own plugin specs uses `.lazy.lua`, which lazy finds by
+walking upward from the cwd, so it applies from any subdirectory:
+
+```lua
+-- <project>/.lazy.lua
+vim.opt.rtp:prepend(vim.fn.fnamemodify(debug.getinfo(1, "S").source:sub(2), ":h"))
+return { { import = "myprojplugins" } }   -- <project>/lua/myprojplugins/*.lua
+```
+
+Three constraints: only the first `.lazy.lua` found is used (no merging of
+nested files); it is read through `vim.secure.read`, so the first open prompts
+for trust; and the module directory must not be named `plugins`, because import
+specs are deduplicated by module name and this config already imports `plugins`
+— a collision is skipped silently, with no error.
+
 ## Language Support
 
 ### Python
-- LSP: **basedpyright** (not pyright) via `lua/plugins/basedpyright.lua`
+- LSP: **basedpyright** (not pyright) via `lua/plugins/lang/python.lua`
 - Custom config disables pyright in astrolsp handlers
 - Mason installs basedpyright automatically
 - venv-selector integration configured
 
 ### Prolog
-- Custom LSP setup via SWI-Prolog (`lua/plugins/prolog.lua`)
+- Custom LSP setup via SWI-Prolog (`lua/plugins/lang/prolog.lua`)
 - Filetype detection: `.pl`, `.pro`, `.P` → `prolog`
 - Manual LSP config (not available in Mason)
 
 ### Go
-- **gopls installation issues:** Requires Go 1.25+, system has 1.24
+- Bundle: `lua/plugins/lang/go.lua`
+- **gopls installation issues:** Requires Go 1.26+, system has 1.25.11
 - Workaround: `go env -w GOTOOLCHAIN=auto` then retry mason install
 
 ### SQL/CQL
+- Bundle: `lua/plugins/lang/sql.lua`
 - CQL language server for Cassandra
 - Custom filetype for `.cql` files
 - SQLFluff formatter configured for postgres dialect
