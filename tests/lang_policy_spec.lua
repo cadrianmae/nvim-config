@@ -45,6 +45,30 @@ check_error("registering an unknown category raises", function() policy.eager { 
 policy._reset()
 check("_reset clears registered entries", policy.resolve "treesitter", { "bash", "lua" })
 
+local function to_package(server) return ({ gopls = "gopls", basedpyright = "basedpyright" })[server] end
+
+check(
+  "installs a configured server that serves the filetype and is missing",
+  policy.packages_to_install({ "gopls" }, { "gopls" }, {}, to_package),
+  { "gopls" }
+)
+check(
+  "skips a server that is already installed",
+  policy.packages_to_install({ "gopls" }, { "gopls" }, { gopls = true }, to_package),
+  {}
+)
+check(
+  "skips a server that serves the filetype but is not configured",
+  policy.packages_to_install({}, { "gopls" }, {}, to_package),
+  {}
+)
+check(
+  "skips a configured server that does not serve this filetype",
+  policy.packages_to_install({ "basedpyright" }, { "gopls" }, {}, to_package),
+  {}
+)
+check("skips a server with no mason package", policy.packages_to_install({ "qmlls" }, { "qmlls" }, {}, to_package), {})
+
 if failures > 0 then
   print(("\n%d test(s) failed"):format(failures))
   vim.cmd "cquit 1"

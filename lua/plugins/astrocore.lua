@@ -150,5 +150,17 @@ return {
         ["<Leader>gt"] = { git_picker("git_status"), desc = "Git status" },
       },
     },
+    -- Install missing Mason servers on first use of a filetype. See
+    -- lua/lang_policy.lua for the selection logic and why
+    -- mason-lspconfig's own `automatic_installation` cannot do this itself.
+    autocmds = {
+      lang_policy_install = {
+        {
+          event = "FileType",
+          desc = "Install Mason servers configured for this filetype but not yet installed",
+          callback = function(args) require("lang_policy").install_for_filetype(vim.bo[args.buf].filetype) end,
+        },
+      },
+    },
   },
 }
