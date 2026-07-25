@@ -29,6 +29,11 @@ require("lazy").setup({
   {
     "williamboman/mason-lspconfig.nvim",
     opts = function(_, opts)
+      -- Packs (e.g. astrocommunity/pack/go) declare servers by appending to
+      -- this list. Record what they asked for before overwriting it, so the
+      -- on-demand installer still knows which servers a filetype's bundle
+      -- actually wants. See lua/lang_policy.lua's `declare`/`get_declared`.
+      policy.declare("lsp", opts.ensure_installed)
       opts.ensure_installed = policy.resolve "lsp"
       opts.automatic_installation = true -- servers install on first attach
     end,

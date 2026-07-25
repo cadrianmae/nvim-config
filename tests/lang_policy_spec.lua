@@ -69,6 +69,36 @@ check(
 )
 check("skips a server with no mason package", policy.packages_to_install({ "qmlls" }, { "qmlls" }, {}, to_package), {})
 
+policy._reset()
+policy.declare("lsp", { "gopls" })
+check("declare records what a pack asked for", policy.get_declared "lsp", { "gopls" })
+
+policy.declare("lsp", { "basedpyright" })
+check("repeat declare calls are additive, not replacing", policy.get_declared "lsp", { "basedpyright", "gopls" })
+
+policy.declare("lsp", { "gopls" })
+check("declaring the same entry twice does not duplicate it", policy.get_declared "lsp", { "basedpyright", "gopls" })
+
+check_error("declaring an unknown category raises", function() policy.declare("nonsense", { "x" }) end)
+
+policy._reset()
+check("get_declared is empty until something declares", policy.get_declared "lsp", {})
+
+-- Regression coverage for the bug this fix addresses: "configured" must come
+-- from what a pack actually declared, not from "does lspconfig know this
+-- server at all" (which is true for nearly everything, including servers
+-- with nothing to do with the filetype in question, e.g. a general grammar
+-- checker showing up for a Go file).
+policy._reset()
+policy.declare("lsp", { "gopls" })
+local function to_package_go(server) return ({ gopls = "gopls", harper_ls = "harper-ls" })[server] end
+check(
+  "selection uses the declared set: an undeclared server that merely serves "
+    .. "the filetype (e.g. a general-purpose server lspconfig also knows about) is excluded",
+  policy.packages_to_install(policy.get_declared "lsp", { "gopls", "harper_ls" }, {}, to_package_go),
+  { "gopls" }
+)
+
 if failures > 0 then
   print(("\n%d test(s) failed"):format(failures))
   vim.cmd "cquit 1"
