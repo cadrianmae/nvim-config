@@ -1083,11 +1083,45 @@ Editor-wide tooling that is not tied to one language goes in `M.baseline` in
 `lua/lang_policy.lua`.
 
 Project-specific overrides use `.neoconf.json`, which `neoconf.nvim` finds by
-searching upward from the file:
+searching upward from the file — so it applies from any subdirectory of the
+project:
 
 ```json
-{ "lspconfig": { "sqls": false } }
+{
+  "lspconfig": {
+    "sqls": false,
+    "basedpyright": {
+      "python.analysis.typeCheckingMode": "off"
+    }
+  }
+}
 ```
+
+Worked example — `~/git/github.com/cadrianmae/tu856-4/.neoconf.json`, applying
+to every module directory beneath it:
+
+```json
+{
+  "lspconfig": {
+    "sqlfluff": {
+      "dialect": "postgres"
+    },
+    "basedpyright": {
+      "python.analysis.typeCheckingMode": "basic",
+      "python.analysis.diagnosticSeverityOverrides": {
+        "reportMissingImports": "warning"
+      }
+    }
+  }
+}
+```
+
+Use `.neoconf.json` for settings and for disabling a server in one project. Do
+not move language *bundles* into a project's `.lazy.lua`: on-demand
+installation already makes an unused global bundle free, while a project-scoped
+spec is removed by `:Lazy sync` (which cleans) whenever Neovim is opened
+elsewhere, and churns `lazy-lock.json` in this repository. Reserve `.lazy.lua`
+for a plugin that genuinely only ever applies to one project.
 
 Note: `ft`, `event` and `keys` do nothing on an `{ import = ... }` block. Lazy's
 `Spec:import` reads only `import`, `name`, `cond` and `enabled`.
